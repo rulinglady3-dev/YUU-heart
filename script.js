@@ -98,7 +98,36 @@ function update(){
 
     const elapsed=(performance.now()-start)/1000;
     
-    if (elapsed > 20 && !window.endShown) {
+    // =====================================================
+// YUMUŞAK GEÇİŞ
+// =====================================================
+
+if (elapsed > 20 && !window.transitionStarted) {
+
+    window.transitionStarted = true;
+
+    // Kalp ve yu yavaşça kaybolsun
+    canvas.style.transition = "opacity 2.5s ease";
+    yu.style.transition =
+        "opacity 1.8s ease, transform 1.8s ease";
+
+    canvas.style.opacity = "0";
+
+    yu.style.opacity = "0";
+
+    yu.style.transform =
+        "translate(-50%, -50%) scale(0.9)";
+
+}
+
+
+// Kalp kaybolduktan sonra son ekran gelsin
+
+if (
+    elapsed > 22.5
+    &&
+    !window.endShown
+) {
 
     window.endShown = true;
 
@@ -106,7 +135,21 @@ function update(){
 
     yu.style.display = "none";
 
-    document.getElementById("endScreen").style.display = "flex";
+    const endScreen =
+        document.getElementById("endScreen");
+
+    endScreen.style.display = "flex";
+
+    endScreen.style.opacity = "0";
+
+    endScreen.style.transition =
+        "opacity 1.5s ease";
+
+    requestAnimationFrame(() => {
+
+        endScreen.style.opacity = "1";
+
+    });
 
 }
 
