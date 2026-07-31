@@ -87,47 +87,246 @@ text-align:center;
 
 }
 
+/* =====================================================
+GÜZEL YENİ BUTON
+===================================================== */
+
 #continueBtn{
 
-padding:16px 40px;
+position:relative;
 
-background:#ff4d6d;
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+min-width:340px;
+
+padding:19px 35px;
 
 color:white;
 
-text-decoration:none;
+font-family:'Dancing Script',cursive;
 
-border-radius:40px;
-
-font-size:24px;
+font-size:30px;
 
 font-weight:bold;
 
-transition:.3s;
+letter-spacing:.5px;
 
-animation: pulse 2s infinite;
+text-decoration:none;
+
+border:1px solid rgba(255,255,255,.5);
+
+border-radius:100px;
+
+background:
+
+linear-gradient(
+135deg,
+rgba(255,70,115,.55),
+rgba(80,8,35,.7)
+);
+
+box-shadow:
+
+0 0 18px rgba(255,65,110,.35),
+
+0 12px 40px rgba(0,0,0,.55),
+
+inset 0 1px 1px rgba(255,255,255,.3);
+
+backdrop-filter:blur(12px);
+
+overflow:hidden;
+
+transition:
+
+transform .35s ease,
+
+box-shadow .35s ease,
+
+background .35s ease;
+
+animation:
+
+buttonFloat
+2.8s
+ease-in-out
+infinite;
 
 }
+
+
+/* Butonun üzerinden geçen ışık */
+
+#continueBtn::before{
+
+content:"";
+
+position:absolute;
+
+top:-30%;
+
+left:-80%;
+
+width:45%;
+
+height:160%;
+
+background:
+
+linear-gradient(
+
+90deg,
+
+transparent,
+
+rgba(255,255,255,.55),
+
+transparent
+
+);
+
+transform:rotate(20deg);
+
+animation:
+
+buttonShine
+4s
+ease-in-out
+infinite;
+
+}
+
+
+/* İç çerçeve */
+
+#continueBtn::after{
+
+content:"";
+
+position:absolute;
+
+inset:3px;
+
+border-radius:100px;
+
+border:1px solid rgba(255,255,255,.12);
+
+pointer-events:none;
+
+}
+
+
+/* Üzerine gelince */
 
 #continueBtn:hover{
 
-transform:scale(1.08);
+transform:
+
+translateY(-6px)
+
+scale(1.06);
+
+background:
+
+linear-gradient(
+
+135deg,
+
+rgba(255,75,125,.85),
+
+rgba(125,15,55,.85)
+
+);
+
+box-shadow:
+
+0 0 35px rgba(255,65,115,.75),
+
+0 18px 50px rgba(0,0,0,.6);
 
 }
 
-  @keyframes pulse{
 
-    0%{
-        transform:scale(1);
-    }
+/* Tıklanınca */
 
-    50%{
-        transform:scale(1.08);
-    }
+#continueBtn:active{
 
-    100%{
-        transform:scale(1);
-    }
+transform:
+
+translateY(0)
+
+scale(.96);
+
+}
+
+
+/* Hafif süzülme */
+
+@keyframes buttonFloat{
+
+0%,
+100%{
+
+transform:
+translateY(0);
+
+}
+
+50%{
+
+transform:
+translateY(-7px);
+
+}
+
+}
+
+
+/* Parlayan ışık */
+
+@keyframes buttonShine{
+
+0%{
+
+left:-80%;
+
+}
+
+45%{
+
+left:140%;
+
+}
+
+100%{
+
+left:140%;
+
+}
+
+}
+
+
+/* Telefon */
+
+@media(max-width:600px){
+
+#continueBtn{
+
+min-width:80vw;
+
+font-size:26px;
+
+padding:
+
+18px
+22px;
+
+}
 
 }
   
