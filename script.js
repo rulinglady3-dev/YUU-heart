@@ -269,19 +269,19 @@ function createHeart(){
 
             size:
 
-            window.innerWidth <= 600
+window.innerWidth <= 600
 
-            ?
+?
 
-            6
-            +
-            Math.random()*2
+8
++
+Math.random()*2
 
-            :
+:
 
-            9
-            +
-            Math.random()*3,
+11
++
+Math.random()*3,
 
 
             twinkle:
@@ -716,11 +716,16 @@ function draw(){
 
 
 
-        ctx.globalAlpha =
+    ctx.globalAlpha =
 
-        p.alpha
-        *
-        glow;
+   Math.min(
+    1,
+    p.alpha
+    *
+    glow
+    *
+    1.15
+    );
 
 
         ctx.fillStyle =
@@ -729,7 +734,7 @@ function draw(){
 
         ctx.font =
 
-        `${p.size}px Arial`;
+     `bold ${p.size}px Arial`;
 
 
         ctx.fillText(
