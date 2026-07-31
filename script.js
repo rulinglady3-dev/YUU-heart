@@ -1,23 +1,11 @@
 // =====================================================
-// LOVE HEART
-// Bölüm 1
+// YU HEART
+// PC + iPAD + PHONE RESPONSIVE
 // =====================================================
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const yu = document.getElementById("yu");
-
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-
-window.addEventListener("resize", () => {
-    resize();
-    createHeart();
-});
-
-resize();
 
 const WORD = "I love you";
 const TOTAL = 5000;
@@ -25,60 +13,290 @@ const TOTAL = 5000;
 let points = [];
 let time = 0;
 let start = performance.now();
+
 let yuVisible = false;
+let revealed = 0;
+
+
 // =====================================================
-// LOVE HEART
-// Bölüm 2
+// EKRAN BOYUTU
+// =====================================================
+
+function resize(){
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    // iPad ve telefonlarda daha doğru ekran yüksekliği
+    const viewportHeight =
+        window.visualViewport
+        ? window.visualViewport.height
+        : height;
+
+
+    // Retina / iPad ekranlarında daha net görüntü
+    const pixelRatio =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+
+    canvas.style.width =
+        width + "px";
+
+
+    canvas.style.height =
+        viewportHeight + "px";
+
+
+    canvas.width =
+        Math.floor(width * pixelRatio);
+
+
+    canvas.height =
+        Math.floor(
+            viewportHeight * pixelRatio
+        );
+
+
+    // Canvas koordinatlarını CSS pikseline çevir
+    ctx.setTransform(
+        pixelRatio,
+        0,
+        0,
+        pixelRatio,
+        0,
+        0
+    );
+
+
+    createHeart();
+
+}
+
+
+// Bilgisayar ekranı değişince
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+// iPad / telefon döndürülünce
+window.addEventListener(
+    "orientationchange",
+    () => {
+
+        setTimeout(
+            resize,
+            250
+        );
+
+    }
+);
+
+
+// Mobil tarayıcı yüksekliği değişince
+if(window.visualViewport){
+
+    window.visualViewport
+    .addEventListener(
+        "resize",
+        resize
+    );
+
+}
+
+
+resize();
+
+
+// =====================================================
+// KALP ŞEKLİ
 // =====================================================
 
 function heartPoint(t){
 
     return{
 
-        x:16*Math.pow(Math.sin(t),3),
+        x:
+        16 *
+        Math.pow(
+            Math.sin(t),
+            3
+        ),
 
         y:
-            13*Math.cos(t)
-            -5*Math.cos(2*t)
-            -2*Math.cos(3*t)
-            -Math.cos(4*t)
+
+        13*Math.cos(t)
+
+        -5*Math.cos(2*t)
+
+        -2*Math.cos(3*t)
+
+        -Math.cos(4*t)
 
     };
 
 }
 
+
+// =====================================================
+// KALBİ OLUŞTUR
+// =====================================================
+
 function createHeart(){
 
-    points=[];
+    points = [];
 
-    const scale=Math.min(canvas.width,canvas.height)/42;
 
-    for(let i=0;i<TOTAL;i++){
+    // Telefon, iPad ve bilgisayarda
+    // kalbin ekrana dengeli oturması
 
-        const t=Math.random()*Math.PI*2;
+    const shortestSide =
+        Math.min(
+            window.innerWidth,
+            window.innerHeight
+        );
 
-        const p=heartPoint(t);
 
-        const depth=0.3+Math.random()*0.7;
+    let scale;
+
+
+    // Telefon
+
+    if(window.innerWidth <= 600){
+
+        scale =
+        shortestSide / 39;
+
+    }
+
+
+    // iPad
+
+    else if(
+        window.innerWidth <= 1180
+    ){
+
+        scale =
+        shortestSide / 40;
+
+    }
+
+
+    // Bilgisayar
+
+    else{
+
+        scale =
+        shortestSide / 42;
+
+    }
+
+
+
+    for(
+        let i = 0;
+        i < TOTAL;
+        i++
+    ){
+
+        const t =
+        Math.random()
+        * Math.PI
+        * 2;
+
+
+        const p =
+        heartPoint(t);
+
+
+        const depth =
+        0.3
+        +
+        Math.random()
+        * 0.7;
+
 
         points.push({
 
-            x:canvas.width/2+p.x*scale*depth,
+            x:
 
-            y:canvas.height/2-p.y*scale*depth,
+            window.innerWidth / 2
+
+            +
+
+            p.x
+            *
+            scale
+            *
+            depth,
+
+
+            y:
+
+            window.innerHeight / 2
+
+            -
+
+            p.y
+            *
+            scale
+            *
+            depth,
+
 
             visible:false,
 
+
             alpha:0,
 
-            targetAlpha:0.45+Math.random()*0.55,
 
-            size:9+Math.random()*3,
+            targetAlpha:
 
-            twinkle:Math.random()*Math.PI*2,
+            0.45
 
-            // Rastgele görünme zamanı
-            delay:Math.random()*3
+            +
+
+            Math.random()
+            * 0.55,
+
+
+            // Küçük ekranlarda
+            // yazılar biraz daha küçük
+
+            size:
+
+            window.innerWidth <= 600
+
+            ?
+
+            6
+            +
+            Math.random()*2
+
+            :
+
+            9
+            +
+            Math.random()*3,
+
+
+            twinkle:
+
+            Math.random()
+            *
+            Math.PI
+            *
+            2,
+
+
+            delay:
+
+            Math.random()
+            * 3
 
         });
 
@@ -86,162 +304,452 @@ function createHeart(){
 
 }
 
-createHeart(); 
-// =====================================================
-// LOVE HEART
-// Bölüm 3
-// =====================================================
 
-let revealed = 0;
+// =====================================================
+// ANİMASYON GÜNCELLE
+// =====================================================
 
 function update(){
 
-    const elapsed=(performance.now()-start)/1000;
-    
-    // =====================================================
-// YUMUŞAK GEÇİŞ
-// =====================================================
+    const elapsed =
 
-if (elapsed > 20 && !window.transitionStarted) {
+    (
+        performance.now()
+        -
+        start
+    )
 
-    window.transitionStarted = true;
+    / 1000;
 
-    // Kalp ve yu yavaşça kaybolsun
-    canvas.style.transition = "opacity 2.5s ease";
-    yu.style.transition =
+
+
+    // =================================================
+    // KALP VE YU KAYBOLSUN
+    // =================================================
+
+    if(
+
+        elapsed > 20
+
+        &&
+
+        !window.transitionStarted
+
+    ){
+
+
+        window.transitionStarted =
+        true;
+
+
+        canvas.style.transition =
+
+        "opacity 2.5s ease";
+
+
+        yu.style.transition =
+
         "opacity 1.8s ease, transform 1.8s ease";
 
-    canvas.style.opacity = "0";
 
-    yu.style.opacity = "0";
+        canvas.style.opacity =
+        "0";
 
-    yu.style.transform =
+
+        yu.style.opacity =
+        "0";
+
+
+        yu.style.transform =
+
         "translate(-50%, -50%) scale(0.9)";
 
-}
+    }
 
 
-// Kalp kaybolduktan sonra son ekran gelsin
 
-if (
-    elapsed > 22.5
-    &&
-    !window.endShown
-) {
+    // =================================================
+    // SON EKRAN
+    // =================================================
 
-    window.endShown = true;
+    if(
 
-    canvas.style.display = "none";
+        elapsed > 22.5
 
-    yu.style.display = "none";
+        &&
 
-    const endScreen =
-        document.getElementById("endScreen");
+        !window.endShown
 
-    endScreen.style.display = "flex";
+    ){
 
-    endScreen.style.opacity = "0";
 
-    endScreen.style.transition =
+        window.endShown =
+        true;
+
+
+        canvas.style.display =
+        "none";
+
+
+        yu.style.display =
+        "none";
+
+
+        const endScreen =
+
+        document.getElementById(
+            "endScreen"
+        );
+
+
+        endScreen.style.display =
+        "flex";
+
+
+        endScreen.style.opacity =
+        "0";
+
+
+        endScreen.style.transition =
+
         "opacity 1.5s ease";
 
-    requestAnimationFrame(() => {
 
-        endScreen.style.opacity = "1";
+        requestAnimationFrame(
+            () => {
 
-    });
+                endScreen.style.opacity =
+                "1";
 
-}
+            }
+        );
 
-    // İlk başta yavaş, sonra hızlanır
-    const speed=Math.min(8+elapsed*elapsed*18,120);
+    }
 
-    revealed+=speed/60;
 
-    const chance=Math.min(revealed/points.length,1);
 
-    for(const p of points){
+    // =================================================
+    // KALP OLUŞUM HIZI
+    // =================================================
 
-        if(!p.visible){
+    const speed =
 
-            if(Math.random()<chance*0.015 && elapsed>p.delay){
+    Math.min(
 
-                p.visible=true;
+        8
+
+        +
+
+        elapsed
+        *
+        elapsed
+        *
+        18,
+
+        120
+
+    );
+
+
+    revealed +=
+
+    speed / 60;
+
+
+    const chance =
+
+    Math.min(
+
+        revealed
+        /
+        points.length,
+
+        1
+
+    );
+
+
+
+    for(
+        const p
+        of points
+    ){
+
+
+        if(
+            !p.visible
+        ){
+
+
+            if(
+
+                Math.random()
+
+                <
+
+                chance
+                *
+                0.015
+
+                &&
+
+                elapsed
+                >
+                p.delay
+
+            ){
+
+
+                p.visible =
+                true;
 
             }
 
         }
 
-        if(p.visible){
 
-            p.alpha+=(p.targetAlpha-p.alpha)*0.06;
+
+        if(
+            p.visible
+        ){
+
+
+            p.alpha +=
+
+            (
+                p.targetAlpha
+                -
+                p.alpha
+            )
+
+            *
+
+            0.06;
 
         }
 
     }
 
-    // Kalbin %75'i oluşunca yu yazısı gelsin
-    const visibleCount=points.filter(p=>p.visible).length;
 
-    if(!yuVisible && visibleCount>points.length*0.75){
 
-        yuVisible=true;
+    // =================================================
+    // YU YAZISI
+    // =================================================
 
-        yu.style.opacity=1;
+    const visibleCount =
+
+    points.filter(
+        p => p.visible
+    ).length;
+
+
+
+    if(
+
+        !yuVisible
+
+        &&
+
+        visibleCount
+
+        >
+
+        points.length
+        *
+        0.75
+
+    ){
+
+
+        yuVisible =
+        true;
+
+
+        yu.style.opacity =
+        "1";
 
     }
 
-} 
+}
+
+
 // =====================================================
-// LOVE HEART
-// Bölüm 4
+// ÇİZİM
 // =====================================================
 
 function draw(){
 
-    requestAnimationFrame(draw);
+    requestAnimationFrame(
+        draw
+    );
+
 
     update();
 
-    time+=0.03;
 
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+    time += 0.03;
 
-    ctx.textAlign="center";
-    ctx.textBaseline="middle";
 
-    const pulse=1+Math.sin(time)*0.035;
+    // Canvas CSS pikseliyle çiziliyor
 
-    for(const p of points){
+    ctx.clearRect(
 
-        if(!p.visible) continue;
+        0,
 
-        const glow=0.75+Math.sin(time*2+p.twinkle)*0.25;
+        0,
 
-        const x=
-            canvas.width/2+
-            (p.x-canvas.width/2)*pulse;
+        window.innerWidth,
 
-        const y=
-            canvas.height/2+
-            (p.y-canvas.height/2)*pulse;
+        window.innerHeight
 
-        ctx.globalAlpha=p.alpha*glow;
+    );
 
-        ctx.fillStyle="#ff4d6d";
 
-        ctx.font=`${p.size}px Arial`;
+    ctx.textAlign =
+    "center";
+
+
+    ctx.textBaseline =
+    "middle";
+
+
+    const pulse =
+
+    1
+
+    +
+
+    Math.sin(time)
+
+    *
+
+    0.035;
+
+
+
+    for(
+        const p
+        of points
+    ){
+
+
+        if(
+            !p.visible
+        )
+        continue;
+
+
+
+        const glow =
+
+        0.75
+
+        +
+
+        Math.sin(
+
+            time
+            *
+            2
+
+            +
+
+            p.twinkle
+
+        )
+
+        *
+
+        0.25;
+
+
+
+        const x =
+
+        window.innerWidth
+        /
+        2
+
+        +
+
+        (
+
+            p.x
+
+            -
+
+            window.innerWidth
+            /
+            2
+
+        )
+
+        *
+
+        pulse;
+
+
+
+        const y =
+
+        window.innerHeight
+        /
+        2
+
+        +
+
+        (
+
+            p.y
+
+            -
+
+            window.innerHeight
+            /
+            2
+
+        )
+
+        *
+
+        pulse;
+
+
+
+        ctx.globalAlpha =
+
+        p.alpha
+        *
+        glow;
+
+
+        ctx.fillStyle =
+        "#ff4d6d";
+
+
+        ctx.font =
+
+        `${p.size}px Arial`;
+
 
         ctx.fillText(
+
             WORD,
+
             x,
+
             y
+
         );
 
     }
 
-    ctx.globalAlpha=1;
+
+
+    ctx.globalAlpha =
+    1;
 
 }
+
 
 draw();
